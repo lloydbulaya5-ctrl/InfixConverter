@@ -1,0 +1,37 @@
+FUNCTION toPostfix(expression):
+  stack ← empty stack
+  output ← empty string
+
+  FOR each token in expression:
+    IF token is operand:
+      output += token
+    ELSE IF token is '(':
+      push token onto stack
+    ELSE IF token is ')':
+      WHILE stack top ≠ '(':
+        output += pop from stack
+      pop '(' from stack (discard)
+    ELSE IF token is operator:
+      WHILE stack not empty AND
+            precedence(stack.top) >= precedence(token) AND
+            stack.top ≠ '(':
+        output += pop from stack
+      push token onto stack
+
+  WHILE stack not empty:
+    output += pop from stack
+
+  RETURN output
+
+
+FUNCTION toPrefix(expression):
+  reverse the expression
+  swap '(' ↔ ')' in the reversed string
+  result ← toPostfix(reversed expression)
+  reverse result
+  RETURN result
+
+precedence('^') = 3
+precedence('*') = precedence('/') = 2
+precedence('+') = precedence('-') = 1
+otherwise = 0
